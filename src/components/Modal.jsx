@@ -1,22 +1,18 @@
 import React from "react";
-
 export default function Modal({ isOpen, onClose, title, children }) {
     if (!isOpen) return null;
 
     return (
-        <div className="modal show d-block" tabIndex="-1">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">{title}</h5>
-                        <button type="button" className="btn-close" onClick={onClose}></button>
-                    </div>
-                    <div className="modal-body">
-                        {children}
-                    </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div className="bg-white p-4 rounded shadow-md w-full max-w-md">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-semibold">{title}</h2>
+                    <button className="text-gray-500" onClick={onClose}>×</button>
                 </div>
+                {children}
             </div>
         </div>
     );
 }
+
 

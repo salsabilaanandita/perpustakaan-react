@@ -244,76 +244,75 @@ export default function LendingIndex() {
 
   return (
     <div className="container mt-4">
-      <h2>Data Peminjaman</h2>
-      <div className="d-flex justify-content-between mb-3">
-        <button className="btn btn-info" onClick={exportToExcel}>
+      <h2 className="text-2xl font-bold mb-4">Data Peminjaman</h2>
+      <div className="flex justify-between mb-3">
+        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow"
+          onClick={exportToExcel}>
           Export Excel
         </button>
       </div>
 
-      {alert && <div className="alert alert-success">{alert}</div>}
-      {error && <div className="alert alert-danger">{error}</div>}
+      {alert && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-2">{alert}</div>}
+      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-2">{error}</div>}
 
       <div className="mb-3">
         <input
           type="text"
-          className="form-control w-25"
+          className="form-input w-1/4 border border-gray-300 rounded px-3 py-2"
           placeholder="Search by Member ID..."
           value={searchMember}
           onChange={(e) => setSearchMember(e.target.value)}
         />
       </div>
 
-      <table className="table table-bordered mt-3">
-        <thead className="table-dark">
+      <table className="min-w-full border border-gray-300 rounded overflow-hidden mt-3">
+        <thead className="bg-gray-800 text-white">
           <tr>
-            <th>#</th>
-            <th>ID Buku</th>
-            <th>ID Member</th>
-            <th>Tanggal Pinjam</th>
-            <th>Tanggal Pengembalian</th>
-            <th>Status Pengembalian</th>
-            <th>Action</th>
+            <th className="px-3 py-2">#</th>
+            <th className="px-3 py-2">ID Buku</th>
+            <th className="px-3 py-2">ID Member</th>
+            <th className="px-3 py-2">Tanggal Pinjam</th>
+            <th className="px-3 py-2">Tanggal Pengembalian</th>
+            <th className="px-3 py-2">Status Pengembalian</th>
+            <th className="px-3 py-2">Action</th>
           </tr>
         </thead>
         <tbody>
           {filteredLendings.length > 0 ? (
             filteredLendings.map((item, index) => (
-              <tr key={item.id}>
-                <td>{index + 1}</td>
-                <td>{item.id_buku}</td>
-                <td>{item.id_member}</td>
-                <td>{item.tgl_pinjam}</td>
-                <td>{item.tgl_pengembalian}</td>
-                <td>
+              <tr key={item.id} className="border-t">
+                <td className="px-3 py-2">{index + 1}</td>
+                <td className="px-3 py-2">{item.id_buku}</td>
+                <td className="px-3 py-2">{item.id_member}</td>
+                <td className="px-3 py-2">{item.tgl_pinjam}</td>
+                <td className="px-3 py-2">{item.tgl_pengembalian}</td>
+                <td className="px-3 py-2">
                   {item.status_pengembalian ? (
-                    <span className="text-success">Pengembalian selesai</span>
+                    <span className="text-green-600 font-semibold">Pengembalian selesai</span>
                   ) : (
-                    <span className="text-danger">Dalam masa peminjaman</span>
+                    <span className="text-red-600 font-semibold">Dalam masa peminjaman</span>
                   )}
                 </td>
-                <td>
-                  <div className="d-flex gap-2">
+                <td className="px-3 py-2">
+                  <div className="flex gap-2">
                     {!item.status_pengembalian ? (
                       <button
-                        className="btn btn-sm"
+                        className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-sm"
                         onClick={() => handleReturn(item)}
-                        style={{  backgroundColor: '#198754',color: 'white',border: 'none',padding: '6px 12px',borderRadius: '4px'}}
                       >
                         Pengembalian
                       </button>
                     ) : !item.hasDenda ? (
                       new Date() > new Date(item.tgl_pengembalian) ? (
                         <button
-                          className="btn btn-warning btn-sm"
-                          style={{ backgroundColor: '#FFA500', border: 'none', color: 'white' }}
+                          className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm"
                           onClick={() => handleCreateFine(item)}
                         >
                           Create Denda
                         </button>
                       ) : (
                         <button
-                          className="btn btn-info btn-sm"
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-sm"
                           onClick={() => handleViewDetail(item)}
                         >
                           Detail
@@ -321,14 +320,14 @@ export default function LendingIndex() {
                       )
                     ) : (
                       <button
-                        className="btn btn-info btn-sm"
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-sm"
                         onClick={() => handleViewDetail(item)}
                       >
                         Detail
                       </button>
                     )}
                     <button
-                      className="btn btn-secondary btn-sm"
+                      className="bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded text-sm"
                       onClick={() => handleViewHistory(item.id_member)}
                     >
                       History
@@ -339,7 +338,7 @@ export default function LendingIndex() {
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="text-center">Tidak ada data peminjaman</td>
+              <td colSpan="7" className="text-center py-4">Tidak ada data peminjaman</td>
             </tr>
           )}
         </tbody>
@@ -351,21 +350,37 @@ export default function LendingIndex() {
         onClose={() => setIsDetailModalOpen(false)}
         title="Detail Peminjaman"
       >
-        <div className="p-3" >
+        <div className="p-3">
           {selectedLending && (
-            <table className="table table-bordered">
+            <table className="min-w-full border border-gray-300 rounded bg-white">
               <tbody>
-                <tr><th>ID Peminjaman</th><td>{selectedLending.id}</td></tr>
-                <tr><th>ID Buku</th><td>{selectedLending.id_buku}</td></tr>
-                <tr><th>ID Member</th><td>{selectedLending.id_member}</td></tr>
-                <tr><th>Tanggal Pinjam</th><td>{selectedLending.tgl_pinjam}</td></tr>
-                <tr><th>Tanggal Pengembalian</th><td>{selectedLending.tgl_pengembalian}</td></tr>
                 <tr>
-                  <th>Status</th>
-                  <td>
-                    {new Date() > new Date(selectedLending.tgl_pengembalian) ?
-                      <span className="text-danger">Terlambat</span> :
-                      <span className="text-danger">Kerusakan</span>}
+                  <th className="text-left px-4 py-2 bg-gray-100 w-1/3">ID Peminjaman</th>
+                  <td className="px-4 py-2">{selectedLending.id}</td>
+                </tr>
+                <tr>
+                  <th className="text-left px-4 py-2 bg-gray-100">ID Buku</th>
+                  <td className="px-4 py-2">{selectedLending.id_buku}</td>
+                </tr>
+                <tr>
+                  <th className="text-left px-4 py-2 bg-gray-100">ID Member</th>
+                  <td className="px-4 py-2">{selectedLending.id_member}</td>
+                </tr>
+                <tr>
+                  <th className="text-left px-4 py-2 bg-gray-100">Tanggal Pinjam</th>
+                  <td className="px-4 py-2">{selectedLending.tgl_pinjam}</td>
+                </tr>
+                <tr>
+                  <th className="text-left px-4 py-2 bg-gray-100">Tanggal Pengembalian</th>
+                  <td className="px-4 py-2">{selectedLending.tgl_pengembalian}</td>
+                </tr>
+                <tr>
+                  <th className="text-left px-4 py-2 bg-gray-100">Status</th>
+                  <td className="px-4 py-2">
+                    {selectedLending.status_pengembalian
+                      ? <span className="text-green-600 font-semibold">Pengembalian selesai</span>
+                      : <span className="text-red-600 font-semibold">Dalam masa peminjaman</span>
+                    }
                   </td>
                 </tr>
               </tbody>
@@ -384,22 +399,26 @@ export default function LendingIndex() {
           <div className="p-3">
             {selectedLending && (
               <>
-                <div className="mb-3">
-                  <h5>Pengembalian Buku</h5>
-                  <p>Tanggal Pinjam: {new Date(selectedLending.tgl_pinjam).toLocaleDateString('id-ID')}</p>
-                  <p>Tanggal Jatuh Tempo: {new Date(selectedLending.tgl_pengembalian).toLocaleDateString('id-ID')}</p>
-                  
-                  {new Date() > new Date(selectedLending.tgl_pengembalian) && (
-                    <div className="alert alert-warning">
-                      <strong>Perhatian!</strong> Buku ini dikembalikan terlambat. 
-                      Denda keterlambatan akan otomatis dibuat setelah pengembalian.
-                    </div>
-                  )}
-                </div>
-
-                <div className="d-flex justify-content-end gap-2">
-                  <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Tutup</button>
-                  <button type="submit" className="btn btn-success">Proses Pengembalian</button>
+                <table className="min-w-full border border-gray-300 rounded bg-white mb-4">
+                  <tbody>
+                    <tr>
+                      <th className="text-left px-4 py-2 bg-gray-100 w-1/3">Tanggal Pinjam</th>
+                      <td className="px-4 py-2">{new Date(selectedLending.tgl_pinjam).toLocaleDateString('id-ID')}</td>
+                    </tr>
+                    <tr>
+                      <th className="text-left px-4 py-2 bg-gray-100">Tanggal Jatuh Tempo</th>
+                      <td className="px-4 py-2">{new Date(selectedLending.tgl_pengembalian).toLocaleDateString('id-ID')}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                {new Date() > new Date(selectedLending.tgl_pengembalian) && (
+                  <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded mb-4">
+                    <strong>Perhatian!</strong> Buku ini dikembalikan terlambat. Denda keterlambatan akan otomatis dibuat setelah pengembalian.
+                  </div>
+                )}
+                <div className="flex justify-end gap-2">
+                  <button type="button" className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded" onClick={() => setIsModalOpen(false)}>Tutup</button>
+                  <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Proses Pengembalian</button>
                 </div>
               </>
             )}
@@ -409,39 +428,39 @@ export default function LendingIndex() {
 
       {/* Modal Riwayat */}
       <Modal 
-      isOpen={isHistoryModalOpen} 
-      onClose={() => setIsHistoryModalOpen(false)} 
-      title={`Riwayat Peminjaman - Member ID: ${selectedMemberHistory?.id}`}
+        isOpen={isHistoryModalOpen} 
+        onClose={() => setIsHistoryModalOpen(false)} 
+        title={`Riwayat Peminjaman - Member ID: ${selectedMemberHistory?.id}`}
       >
         <div className="p-3">
-          <div className="d-flex justify-content-end mb-3">
+          <div className="flex justify-end mb-3">
             {selectedMemberHistory?.history?.length > 0 && (
               <button 
-                className="btn btn-danger"
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                 onClick={exportMemberHistoryToPDF}
               >
                 Export PDF
               </button>
             )}
           </div>
-          <table className="table table-bordered">
-            <thead>
+          <table className="min-w-full border border-gray-300 rounded bg-white">
+            <thead className="bg-gray-100">
               <tr>
-                <th>#</th>
-                <th>ID Buku</th>
-                <th>Tanggal Pinjam</th>
-                <th>Tanggal Pengembalian</th>
-                <th>Status</th>
+                <th className="px-3 py-2">#</th>
+                <th className="px-3 py-2">ID Buku</th>
+                <th className="px-3 py-2">Tanggal Pinjam</th>
+                <th className="px-3 py-2">Tanggal Pengembalian</th>
+                <th className="px-3 py-2">Status</th>
               </tr>
             </thead>
             <tbody>
               {selectedMemberHistory?.history.map((item, index) => (
-                <tr key={item.id}>
-                  <td>{index + 1}</td>
-                  <td>{item.id_buku}</td>
-                  <td>{item.tgl_pinjam}</td>
-                  <td>{item.tgl_pengembalian}</td>
-                  <td>{item.status_pengembalian ? 'Selesai' : 'Dipinjam'}</td>
+                <tr key={item.id} className="border-t">
+                  <td className="px-3 py-2">{index + 1}</td>
+                  <td className="px-3 py-2">{item.id_buku}</td>
+                  <td className="px-3 py-2">{item.tgl_pinjam}</td>
+                  <td className="px-3 py-2">{item.tgl_pengembalian}</td>
+                  <td className="px-3 py-2">{item.status_pengembalian ? 'Selesai' : 'Dipinjam'}</td>
                 </tr>
               ))}
             </tbody>
@@ -460,10 +479,10 @@ export default function LendingIndex() {
           handleSubmitFine();
         }}>
           <div className="p-3">
-            <div className="mb-3">
-              <label className="form-label">Jenis Denda</label>
+            <div className="mb-4">
+              <label className="block mb-1 font-medium">Jenis Denda</label>
               <select
-                className="form-select"
+                className="w-full border border-gray-300 rounded px-3 py-2"
                 value={fineType}
                 onChange={(e) => {
                   setFineType(e.target.value);
@@ -482,23 +501,26 @@ export default function LendingIndex() {
                 <option value="lainnya">Lainnya</option>
               </select>
             </div>
-
-            <div className="mb-3">
-              <label className="form-label">Jumlah Denda</label>
+            <div className="mb-4">
+              <label className="block mb-1 font-medium">Jumlah Denda</label>
               <input
                 type="text"
-                className="form-control"
-                value={`Rp ${fineAmount.toLocaleString('id-ID')}`}
+                className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
+                value={`Rp ${parseInt(fineAmount).toLocaleString('id-ID')}`}
                 disabled
               />
             </div>
-            <div className="mb-3">
-              <label className="form-label">Deskripsi</label>
-              <input className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} />
+            <div className="mb-4">
+              <label className="block mb-1 font-medium">Deskripsi</label>
+              <input
+                className="w-full border border-gray-300 rounded px-3 py-2"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </div>
-            <div className="d-flex justify-content-end gap-2">
-              <button type="button" className="btn btn-secondary" onClick={() => setIsCreateFineModalOpen(false)}>Batal</button>
-              <button type="submit" className="btn btn-primary">Simpan Denda</button>
+            <div className="flex justify-end gap-2">
+              <button type="button" className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded" onClick={() => setIsCreateFineModalOpen(false)}>Batal</button>
+              <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Simpan Denda</button>
             </div>
           </div>
         </form>

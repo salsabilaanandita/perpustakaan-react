@@ -14,11 +14,17 @@ import Denda from '../pages/dendas/Denda.jsx';
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: <LoginPage />,
+    children: [
+      { path: '', element: <Login /> },
+    ],
+  },
+  {
+    path: '/dashboard',
     element: <Template />,
     children: [
-      { path: '', element: <App /> },
       {
-        path: '/dashboard',
+        path: '',
         element: <PrivatePage />,
         children: [
           { path: '', element: <Dashboard /> },
@@ -26,17 +32,9 @@ export const router = createBrowserRouter([
           { path: 'members', element: <Member /> },
           { path: 'lendings', element: <Lending /> },
           { path: 'lendings/data', element: <Data /> },
-          { path: 'dendas', element: <Denda /> }     
-           ],
+          { path: 'dendas', element: <Denda /> }
+        ],
       },
-    ],
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-    children: [
-      { path: '', element: <Login /> },
-      
     ],
   },
 ]);

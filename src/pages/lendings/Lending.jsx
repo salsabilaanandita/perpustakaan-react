@@ -109,31 +109,39 @@ export default function Lending() {
   }
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Peminjaman Buku</h2>
+    <div className="max-w-3xl mx-auto mt-8">
+      <h2 className="mb-6 text-2xl font-bold">Peminjaman Buku</h2>
 
-      {alert && <div className="alert alert-success">{alert}</div>}
+      {alert && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
+          {alert}
+        </div>
+      )}
 
       {books.length > 0 ? (
-        <div className="table-responsive">
-          <table className="table table-bordered table-hover">
-            <thead className="table-dark">
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-300 rounded">
+            <thead className="bg-gray-800 text-white">
               <tr>
-                <th>#</th>
-                <th>Judul Buku</th>
-                <th>Stok</th>
-                <th>Action</th>
+                <th className="px-3 py-2">#</th>
+                <th className="px-3 py-2">Judul Buku</th>
+                <th className="px-3 py-2">Stok</th>
+                <th className="px-3 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
               {books.map((book, index) => (
-                <tr key={book.id}>
-                  <td>{index + 1}</td>
-                  <td>{book.judul || 'No Title'}</td>
-                  <td>{book.stok || 0}</td>
-                  <td>
+                <tr key={book.id} className="border-t">
+                  <td className="px-3 py-2">{index + 1}</td>
+                  <td className="px-3 py-2">{book.judul || 'No Title'}</td>
+                  <td className="px-3 py-2">{book.stok || 0}</td>
+                  <td className="px-3 py-2">
                     <button
-                      className={`btn btn-sm ${book.stok > 0 ? 'btn-primary' : 'btn-secondary'}`}
+                      className={`px-3 py-1 rounded text-white text-sm transition ${
+                        book.stok > 0
+                          ? 'bg-blue-500 hover:bg-blue-600'
+                          : 'bg-gray-400 cursor-not-allowed'
+                      }`}
                       disabled={book.stok <= 0}
                       onClick={() => handleSelectBook(book)}
                     >
@@ -146,29 +154,31 @@ export default function Lending() {
           </table>
         </div>
       ) : (
-        <div className="alert alert-info">
+        <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 rounded mb-4">
           Tidak ada buku tersedia
         </div>
       )}
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Form Peminjaman Buku">
         {error && (
-          <div className="alert alert-danger">{error.message}</div>
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+            {error.message}
+          </div>
         )}
         <form onSubmit={handleFormSubmit}>
-          <div className="mb-3">
-            <label className="form-label">ID Buku</label>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium">ID Buku</label>
             <input
               type="text"
-              className="form-control"
+              className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
               value={formModal.id_buku}
               readOnly
             />
           </div>
-          <div className="mb-3">
-            <label className="form-label">Pilih Member</label>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium">Pilih Member</label>
             <select
-              className="form-control"
+              className="w-full border border-gray-300 rounded px-3 py-2"
               value={formModal.id_member}
               onChange={(e) => setFormModal({ ...formModal, id_member: e.target.value })}
               required
@@ -181,27 +191,32 @@ export default function Lending() {
               ))}
             </select>
           </div>
-          <div className="mb-3">
-            <label className="form-label">Tanggal Pinjam</label>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium">Tanggal Pinjam</label>
             <input
               type="date"
-              className="form-control"
+              className="w-full border border-gray-300 rounded px-3 py-2"
               value={formModal.tgl_pinjam}
               onChange={(e) => setFormModal({ ...formModal, tgl_pinjam: e.target.value })}
               required
             />
           </div>
-          <div className="mb-3">
-            <label className="form-label">Tanggal Pengembalian</label>
+          <div className="mb-6">
+            <label className="block mb-1 font-medium">Tanggal Pengembalian</label>
             <input
               type="date"
-              className="form-control"
+              className="w-full border border-gray-300 rounded px-3 py-2"
               value={formModal.tgl_pengembalian}
               onChange={(e) => setFormModal({ ...formModal, tgl_pengembalian: e.target.value })}
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">Pinjam Buku</button>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold transition"
+          >
+            Pinjam Buku
+          </button>
         </form>
       </Modal>
     </div>

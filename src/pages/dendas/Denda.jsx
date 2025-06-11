@@ -105,38 +105,47 @@ export default function Dendas() {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-3">Data Denda</h2>
+    <div className="max-w-5xl mx-auto mt-8">
+      <h2 className="mb-4 text-2xl font-bold">Data Denda</h2>
 
-      {alert && <div className="alert alert-success">{alert}</div>}
-      {error && <div className="alert alert-danger">{error}</div>}
+      {alert && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
+          {alert}
+        </div>
+      )}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+          {error}
+        </div>
+      )}
 
-        <table className="table table-bordered">
-          <thead className="table-dark">
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-300 rounded">
+          <thead className="bg-gray-800 text-white">
             <tr>
-              <th>#</th>
-              <th>ID Member</th>
-              <th>ID Buku</th>
-              <th>Jenis Denda</th>
-              <th>Jumlah Denda</th>
-              <th>Deskripsi</th>
-              <th>Tanggal</th>
-              <th>Aksi</th>
+              <th className="px-3 py-2">#</th>
+              <th className="px-3 py-2">ID Member</th>
+              <th className="px-3 py-2">ID Buku</th>
+              <th className="px-3 py-2">Jenis Denda</th>
+              <th className="px-3 py-2">Jumlah Denda</th>
+              <th className="px-3 py-2">Deskripsi</th>
+              <th className="px-3 py-2">Tanggal</th>
+              <th className="px-3 py-2">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {dendas.length > 0 ? dendas.map((denda, index) => (
-              <tr key={denda.id}>
-                <td>{index + 1}</td>
-                <td>{denda.id_member}</td>
-                <td>{denda.id_buku}</td>
-                <td>{denda.jenis_denda}</td>
-                <td>Rp {parseInt(denda.jumlah_denda).toLocaleString('id-ID')}</td>
-                <td>{denda.deskripsi}</td>
-                <td>{new Date(denda.created_at).toLocaleDateString('id-ID')}</td>
-                <td>
+              <tr key={denda.id} className="border-t">
+                <td className="px-3 py-2">{index + 1}</td>
+                <td className="px-3 py-2">{denda.id_member}</td>
+                <td className="px-3 py-2">{denda.id_buku}</td>
+                <td className="px-3 py-2 capitalize">{denda.jenis_denda}</td>
+                <td className="px-3 py-2">Rp {parseInt(denda.jumlah_denda).toLocaleString('id-ID')}</td>
+                <td className="px-3 py-2">{denda.deskripsi}</td>
+                <td className="px-3 py-2">{new Date(denda.created_at).toLocaleDateString('id-ID')}</td>
+                <td className="px-3 py-2">
                   <button 
-                    className="btn btn-info btn-sm"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
                     onClick={() => detailDenda(denda.id_member)}
                   >
                     Riwayat Denda
@@ -144,10 +153,13 @@ export default function Dendas() {
                 </td>
               </tr>
             )) : (
-              <tr><td colSpan="8" className="text-center">Data kosong</td></tr>
+              <tr>
+                <td colSpan="8" className="text-center py-4">Data kosong</td>
+              </tr>
             )}
           </tbody>
         </table>
+      </div>
 
       <Modal 
         isOpen={isDetailDenda} 
@@ -156,25 +168,27 @@ export default function Dendas() {
       >
         <div className="p-3">
           {denda.map((item, index) => (
-            <div key={index} className="card mb-3">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-6">
-                    <p><strong>ID Member:</strong> {item.id_member}</p>
-                    <p><strong>ID Buku:</strong> {item.id_buku}</p>
-                    <p><strong>Jenis Denda:</strong> {item.jenis_denda}</p>
-                    <p><strong>Jumlah Denda:</strong> Rp {parseInt(item.jumlah_denda).toLocaleString('id-ID')}</p>
-                  </div>
-                  <div className="col-md-6">
-                    <p><strong>Deskripsi:</strong> {item.deskripsi}</p>
-                    <p><strong>Tanggal:</strong> {new Date(item.created_at).toLocaleDateString('id-ID')}</p>
-                  </div>
+            <div key={index} className="border rounded shadow mb-4 p-4 bg-gray-50">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p><span className="font-semibold">ID Member:</span> {item.id_member}</p>
+                  <p><span className="font-semibold">ID Buku:</span> {item.id_buku}</p>
+                  <p><span className="font-semibold">Jenis Denda:</span> {item.jenis_denda}</p>
+                  <p><span className="font-semibold">Jumlah Denda:</span> Rp {parseInt(item.jumlah_denda).toLocaleString('id-ID')}</p>
+                </div>
+                <div>
+                  <p><span className="font-semibold">Deskripsi:</span> {item.deskripsi}</p>
+                  <p><span className="font-semibold">Tanggal:</span> {new Date(item.created_at).toLocaleDateString('id-ID')}</p>
                 </div>
               </div>
             </div>
           ))}
-          <div className="d-flex justify-content-end mt-3">
-            <button type="button" className="btn btn-secondary" onClick={() => setIsDetailDenda(false)}>
+          <div className="flex justify-end mt-3">
+            <button
+              type="button"
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+              onClick={() => setIsDetailDenda(false)}
+            >
               Tutup
             </button>
           </div>
