@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../constant";
 
 export default function Login() {
   const [login, setLogin] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -21,11 +22,15 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const API_URL = "http://45.64.100.26:88/perpus-api/public/api";
-    
+    setError(null);
+
     axios.post(`${API_URL}/login`, login)
       .then(res => {
-        localStorage.setItem("access_token", res.data.token);
+        const token = res.data.access_token || res.data.token;
+        if (!token) {
+          throw new Error("Token login tidak ditemukan dari server");
+        }
+        localStorage.setItem("access_token", token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         navigate("/dashboard");
       })
@@ -33,6 +38,8 @@ export default function Login() {
         if (err.response?.status === 401) {
           localStorage.clear();
           setError({ message: "Email atau password salah" });
+        } else if (!err.response) {
+          setError({ message: "Server login tidak dapat dihubungi" });
         } else {
           setError({ message: err.response?.data?.message || "Terjadi kesalahan" });
         }
@@ -54,19 +61,19 @@ export default function Login() {
         )}
 
         <div className="mb-4">
-          <label htmlFor="email" className="block mb-1 font-medium text-gray-700">
-            Email address
+          <label htmlFor="username" className="block mb-1 font-medium text-gray-700">
+            Username
           </label>
           <input
-            type="email"
+            type="text"
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            id="email"
-            name="email"
-            value={login.email}
+            id="username"
+            name="username"
+            value={login.username}
             onChange={handleChange}
             required
             autoFocus
-            placeholder="Masukkan email"
+            placeholder="Masukkan username"
           />
         </div>
 
